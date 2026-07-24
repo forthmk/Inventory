@@ -1,4 +1,11 @@
-const {createUser, getAllUsers} = require("../Controllers/userControllers")
+const {
+  createUser,
+  getAllUsers,
+  getUserById,
+  updateProfileImage,
+  updateUser,
+  deleteUser,
+} = require("../Controllers/userControllers");
 
 async function userRoutes(fastify, options) {
   fastify.route({
@@ -12,6 +19,7 @@ async function userRoutes(fastify, options) {
           username: { type: "string" },
           email: { type: "string" },
           password: { type: "string" },
+          profileImage: { type: "string", nullable: true }
         },
       },
       response: {
@@ -30,6 +38,14 @@ async function userRoutes(fastify, options) {
   });
 
   fastify.get("/users", getAllUsers);
+  //get singe user by ID
+  fastify.get("/users/:id", getUserById);
+  // Update profile image (cloudflare R2 path/url)
+fastify.patch("/users/:id/profile-image", updateProfileImage);
+//update user details (username, email)
+fastify.patch("/users/:id", updateUser);
+//delete user 
+fastify.deleteUser("/users/:id", deleteUser);
 }
 
 module.exports = userRoutes;
